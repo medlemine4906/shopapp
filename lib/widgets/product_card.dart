@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../services/cart_service.dart';
 import '../theme/app_theme.dart';
+import 'product_image.dart';
 
 class ProductCard extends StatefulWidget {
   final Product product;
@@ -87,27 +88,21 @@ class _ProductCardState extends State<ProductCard>
               Expanded(
                 flex: 3,
                 child: ClipRRect(
-                  borderRadius:
-                      const BorderRadius.vertical(top: Radius.circular(16)),
+                  borderRadius: const BorderRadius.vertical(top: Radius.circular(16)),
                   child: Stack(
                     fit: StackFit.expand,
                     children: [
-                      Image.network(
-                        widget.product.imageUrl,
+                      ProductImage(
+                        imageUrl: widget.product.imageUrl,
+                        category: widget.product.category,
+                        productName: widget.product.name,
                         fit: BoxFit.cover,
-                        errorBuilder: (_, _, _) => Container(
-                          color: const Color(0xFFF3F4F6),
-                          child: const Icon(Icons.image_outlined,
-                              color: Color(0xFFD1D5DB), size: 32),
-                        ),
                       ),
                       if (widget.product.hasDiscount)
                         Positioned(
-                          top: 8,
-                          left: 8,
+                          top: 8, left: 8,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: AppTheme.accent,
                               borderRadius: BorderRadius.circular(6),
@@ -124,11 +119,9 @@ class _ProductCardState extends State<ProductCard>
                         ),
                       if (widget.product.isNew)
                         Positioned(
-                          top: 8,
-                          right: 8,
+                          top: 8, right: 8,
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 6, vertical: 2),
+                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
                             decoration: BoxDecoration(
                               color: AppTheme.success,
                               borderRadius: BorderRadius.circular(6),
@@ -169,8 +162,7 @@ class _ProductCardState extends State<ProductCard>
                       const SizedBox(height: 2),
                       Row(
                         children: [
-                          const Icon(Icons.star_rounded,
-                              color: AppTheme.gold, size: 12),
+                          const Icon(Icons.star_rounded, color: AppTheme.gold, size: 12),
                           const SizedBox(width: 2),
                           Text(
                             widget.product.rating.toStringAsFixed(1),
@@ -212,14 +204,12 @@ class _ProductCardState extends State<ProductCard>
                           GestureDetector(
                             onTap: _onAddToCart,
                             child: Container(
-                              width: 32,
-                              height: 32,
+                              width: 32, height: 32,
                               decoration: BoxDecoration(
                                 color: AppTheme.primary,
                                 borderRadius: BorderRadius.circular(10),
                               ),
-                              child: const Icon(Icons.add,
-                                  color: Colors.white, size: 18),
+                              child: const Icon(Icons.add, color: Colors.white, size: 18),
                             ),
                           ),
                         ],

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/product.dart';
 import '../theme/app_theme.dart';
+import 'product_image.dart';
 
 class FeaturedCard extends StatelessWidget {
   final Product product;
@@ -38,22 +39,15 @@ class FeaturedCard extends StatelessWidget {
               borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
               child: Stack(
                 children: [
-                  Image.network(
-                    product.imageUrl,
+                  ProductImage(
+                    imageUrl: product.imageUrl,
+                    category: product.category,
+                    productName: product.name,
                     height: 180,
-                    width: double.infinity,
-                    fit: BoxFit.cover,
-                    errorBuilder: (_, _, _) => Container(
-                      height: 180,
-                      color: const Color(0xFFF3F4F6),
-                      child: const Icon(Icons.image_outlined,
-                          color: Color(0xFFD1D5DB), size: 48),
-                    ),
                   ),
                   // Badges
                   Positioned(
-                    top: 10,
-                    left: 10,
+                    top: 10, left: 10,
                     child: Row(
                       children: [
                         if (product.hasDiscount)
@@ -70,8 +64,7 @@ class FeaturedCard extends StatelessWidget {
                   ),
                   // Rating
                   Positioned(
-                    top: 10,
-                    right: 10,
+                    top: 10, right: 10,
                     child: Container(
                       padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                       decoration: BoxDecoration(
@@ -81,8 +74,7 @@ class FeaturedCard extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.star_rounded,
-                              color: AppTheme.gold, size: 14),
+                          const Icon(Icons.star_rounded, color: AppTheme.gold, size: 14),
                           const SizedBox(width: 3),
                           Text(
                             product.rating.toStringAsFixed(1),
