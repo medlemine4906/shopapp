@@ -18,55 +18,102 @@ class FeaturedCard extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 260,
-        margin: const EdgeInsets.only(right: AppSpacing.md),
+        width: 280,
+        margin: const EdgeInsets.only(right: 16),
         decoration: BoxDecoration(
-          color: AppTheme.card,
-          borderRadius: BorderRadius.circular(20),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(24),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.07),
-              blurRadius: 20,
-              offset: const Offset(0, 4),
+              color: Colors.black.withValues(alpha: 0.09),
+              blurRadius: 24,
+              offset: const Offset(0, 6),
             ),
           ],
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Image
+
+            // ── Image grande ──────────────────────────────────────
             ClipRRect(
-              borderRadius: const BorderRadius.vertical(top: Radius.circular(20)),
+              borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
               child: Stack(
                 children: [
                   ProductImage(
                     imageUrl: product.imageUrl,
                     category: product.category,
                     productName: product.name,
-                    height: 180,
+                    height: 200,
+                    fit: BoxFit.cover,
                   ),
-                  // Badges
+
+                  // Dégradé bas
                   Positioned(
-                    top: 10, left: 10,
+                    bottom: 0, left: 0, right: 0,
+                    height: 80,
+                    child: DecoratedBox(
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          begin: Alignment.bottomCenter,
+                          end: Alignment.topCenter,
+                          colors: [
+                            Colors.black.withValues(alpha: 0.5),
+                            Colors.transparent,
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+
+                  // Badges haut gauche
+                  Positioned(
+                    top: 12, left: 12,
                     child: Row(
                       children: [
                         if (product.hasDiscount)
-                          _Badge(
-                            label: '-${product.discountPercent.toInt()}%',
-                            color: AppTheme.accent,
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.accent,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: Text(
+                              '-${product.discountPercent.toInt()}%',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
                           ),
                         if (product.isNew) ...[
-                          const SizedBox(width: 4),
-                          const _Badge(label: 'NEW', color: AppTheme.success),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                            decoration: BoxDecoration(
+                              color: AppTheme.success,
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            child: const Text(
+                              'NEW',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                              ),
+                            ),
+                          ),
                         ],
                       ],
                     ),
                   ),
-                  // Rating
+
+                  // Rating haut droite
                   Positioned(
-                    top: 10, right: 10,
+                    top: 12, right: 12,
                     child: Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
                       decoration: BoxDecoration(
                         color: Colors.black.withValues(alpha: 0.55),
                         borderRadius: BorderRadius.circular(20),
@@ -74,13 +121,14 @@ class FeaturedCard extends StatelessWidget {
                       child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          const Icon(Icons.star_rounded, color: AppTheme.gold, size: 14),
-                          const SizedBox(width: 3),
+                          const Icon(Icons.star_rounded,
+                              color: AppTheme.gold, size: 15),
+                          const SizedBox(width: 4),
                           Text(
                             product.rating.toStringAsFixed(1),
                             style: const TextStyle(
                               color: Colors.white,
-                              fontSize: 12,
+                              fontSize: 13,
                               fontWeight: FontWeight.w700,
                             ),
                           ),
@@ -88,65 +136,85 @@ class FeaturedCard extends StatelessWidget {
                       ),
                     ),
                   ),
+
+                  // Nom sur l'image (bas)
+                  Positioned(
+                    bottom: 12, left: 14, right: 14,
+                    child: Text(
+                      product.name,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.3,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                    ),
+                  ),
                 ],
               ),
             ),
 
-            // Content
+            // ── Infos sous l'image ────────────────────────────────
             Padding(
-              padding: const EdgeInsets.all(AppSpacing.md),
+              padding: const EdgeInsets.fromLTRB(14, 12, 14, 14),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    product.name,
-                    style: const TextStyle(
-                      fontSize: 15,
-                      fontWeight: FontWeight.w700,
-                      color: AppTheme.textPrimary,
-                    ),
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                  const SizedBox(height: 4),
+                  // Description
                   Text(
                     product.description,
                     style: const TextStyle(
                       fontSize: 12,
                       color: AppTheme.textSecondary,
-                      height: 1.4,
+                      height: 1.5,
                     ),
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
                   ),
-                  const SizedBox(height: 10),
+                  const SizedBox(height: 12),
+
+                  // Prix + avis
                   Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
                         '${product.price.toStringAsFixed(0)} €',
                         style: const TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                          fontSize: 22,
+                          fontWeight: FontWeight.w900,
                           color: AppTheme.textPrimary,
+                          letterSpacing: -0.8,
                         ),
                       ),
-                      if (product.hasDiscount) ...[
-                        const SizedBox(width: 6),
-                        Text(
-                          '${product.originalPrice!.toStringAsFixed(0)} €',
-                          style: const TextStyle(
-                            fontSize: 13,
-                            color: AppTheme.textSecondary,
-                            decoration: TextDecoration.lineThrough,
+                      const SizedBox(width: 8),
+                      if (product.hasDiscount)
+                        Padding(
+                          padding: const EdgeInsets.only(bottom: 2),
+                          child: Text(
+                            '${product.originalPrice!.toStringAsFixed(0)} €',
+                            style: const TextStyle(
+                              fontSize: 14,
+                              color: AppTheme.textSecondary,
+                              decoration: TextDecoration.lineThrough,
+                            ),
                           ),
                         ),
-                      ],
                       const Spacer(),
-                      Text(
-                        '${product.reviewCount} avis',
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: AppTheme.textSecondary,
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: AppTheme.surface,
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        child: Text(
+                          '${product.reviewCount} avis',
+                          style: const TextStyle(
+                            fontSize: 11,
+                            color: AppTheme.textSecondary,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                     ],
@@ -155,32 +223,6 @@ class FeaturedCard extends StatelessWidget {
               ),
             ),
           ],
-        ),
-      ),
-    );
-  }
-}
-
-class _Badge extends StatelessWidget {
-  final String label;
-  final Color color;
-  const _Badge({required this.label, required this.color});
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(6),
-      ),
-      child: Text(
-        label,
-        style: const TextStyle(
-          color: Colors.white,
-          fontSize: 11,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.5,
         ),
       ),
     );

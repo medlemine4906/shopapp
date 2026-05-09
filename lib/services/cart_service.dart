@@ -1,14 +1,6 @@
 import 'package:flutter/foundation.dart';
 import '../models/product.dart';
-
-class CartItem {
-  final Product product;
-  int quantity;
-
-  CartItem({required this.product, this.quantity = 1});
-
-  double get total => product.price * quantity;
-}
+import '../models/cart_item.dart';
 
 class CartService extends ChangeNotifier {
   static final CartService _instance = CartService._internal();
@@ -36,6 +28,17 @@ class CartService extends ChangeNotifier {
 
   void remove(String productId) {
     _items.removeWhere((i) => i.product.id == productId);
+    notifyListeners();
+  }
+
+  void decrementQuantity(String productId) {
+    final index = _items.indexWhere((i) => i.product.id == productId);
+    if (index < 0) return;
+    if (_items[index].quantity <= 1) {
+      _items.removeAt(index);
+    } else {
+      _items[index].quantity--;
+    }
     notifyListeners();
   }
 
